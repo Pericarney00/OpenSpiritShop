@@ -17,7 +17,7 @@ const transformRepoToPotion = (repo: GithubRepo, index: number) => {
     ...repo,
     topics: repo.topics.slice(0, 3),
     potionEffect: POTION_EFFECTS[index % POTION_EFFECTS.length],
-    magicalType: MAGICAL_TYPES[index % POTION_EFFECTS.length],
+    magicalType: MAGICAL_TYPES[index % MAGICAL_TYPES.length].id,
   };
 
 }
@@ -35,14 +35,11 @@ export async function fetchPotions() {
   }
 
   try {
-    const response = await fetch(url, {headers});
-    if (!response.ok) {
-      throw new Error(`Failed to fetch potions`);
-    }
+    const response = await fetch(url, {headers, "cache": "force-cache"});
 
     const data = await response.json();
     console.log({ data });
-    return data.items.map((repo: GithubRepo, index: numer) =>
+    return data.items.map((repo: GithubRepo, index: number) =>
     transformRepoToPotion(repo,index))
   } catch (error) {
     console.error(`Failed to fetch potions`, (error as Error).message);

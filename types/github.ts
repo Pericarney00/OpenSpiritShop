@@ -1,6 +1,5 @@
 
 
-
 export type GithubRepo = {
   id: number;
   name: string;
@@ -15,4 +14,11 @@ export type GithubRepo = {
   };
   language: string;
   updated_at: string;
+};
+
+export type MagicalType = "fire" | "ice"|"electric"|"all"
+
+export interface PotionType extends GithubRepo{
+  potionsEffect: string;
+  magicalType: MagicalType;
 }
