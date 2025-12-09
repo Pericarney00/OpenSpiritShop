@@ -9,6 +9,8 @@ import { getMagicalTypeIcon } from "@/utils";
 import { PackageIcon, StarIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { formatNumber } from "@/utils/costants";
+import Link from "next/link";
+
 
 
 export function PotionCard({
@@ -23,11 +25,12 @@ export function PotionCard({
   forks_count,
 }: PotionType) {
   return (
-    <Card
+    <Link href={`/potions/${full_name.replace("/","__")}`}>
+      <Card
       className={`potion-card relative group h-full cursor-pointer transition-all duration-300 
         potion-${magicalType}`}
-      key={`${full_name}-${name}`}
-    >
+        key={`${full_name}-${name}`}
+        >
       <div className="absolute right-4 top-4 z-10">
         {getMagicalTypeIcon(magicalType)}
       </div>
@@ -40,7 +43,7 @@ export function PotionCard({
                 fill
                 className="object-cover"
                 alt={login}
-              />
+                />
             </div>
           </div>
           <div>
@@ -71,14 +74,16 @@ export function PotionCard({
         <div className="flex flex-wrap gap-2">
           {topics.map((topic, index) => (
             <Badge
-              key={index}
-              className="text-xs px-2 py-1 bg-magic-purple/15 text-white/80 hover:bg-magic-purple/25 "
+            key={index}
+            className="text-xs px-2 py-1 bg-magic-purple/15 text-white/80 hover:bg-magic-purple/25 "
             >
               {topic}
             </Badge>
           ))}
         </div>
       </CardContent>
-    </Card>
+      </Card>
+    </Link>
+    
   );
 }

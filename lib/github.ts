@@ -11,7 +11,6 @@ const POTION_EFFECTS = [
   "Unlocks the secrets of clean architechture"
 ];
 
-
 const transformRepoToPotion = (repo: GithubRepo, index: number) => {
   return {
     ...repo,
@@ -19,20 +18,18 @@ const transformRepoToPotion = (repo: GithubRepo, index: number) => {
     potionEffect: POTION_EFFECTS[index % POTION_EFFECTS.length],
     magicalType: MAGICAL_TYPES[index % MAGICAL_TYPES.length].id,
   };
-
 }
+
 export async function fetchPotions() {
-  
   const url = `${GITHUB_API_URL}/search/repositories?q=topic:javascript+stars:>5000&sort=stars&order=desc`;
 
   const githubToken = process.env.GITHUB_TOKEN;
 
   const headers = {
     Accept: "application/vnd.github+json",
-    ...(githubToken && {
       Authorization: `Bearer ${githubToken}`,
-    })
-  }
+    }
+  
 
   try {
     const response = await fetch(url, {headers, "cache": "force-cache"});
@@ -41,6 +38,30 @@ export async function fetchPotions() {
     console.log({ data });
     return data.items.map((repo: GithubRepo, index: number) =>
     transformRepoToPotion(repo,index))
+  } catch (error) {
+    console.error(`Failed to fetch potions`, (error as Error).message);
+    return [];
+  }
+}
+
+export async function fetchPotion(owner: string, repo:string) {
+  const url = `${GITHUB_API_URL}/repos/${owner}/${repo}`;
+
+  const githubToken = process.env.GITHUB_TOKEN;
+
+  const headers = {
+    Accept: "application/vnd.github+json",
+      Authorization: `Bearer ${githubToken}`,
+    }
+
+  try {
+    const response = await fetch(url, {
+      headers, next: { revalidate: 3600 } //every hour
+    });
+
+    const data = await response.json();
+    console.log("Fetching potion", owner, repo);
+    return transformRepoToPotion(data, 0);
   } catch (error) {
     console.error(`Failed to fetch potions`, (error as Error).message);
     return [];
