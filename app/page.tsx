@@ -1,8 +1,7 @@
-import { Button } from "@/components/ui/button"
-import { Maiden_Orange } from "next/font/google"
+
 import { fetchPotions } from "@/lib/github";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { PotionType } from "@/types/github";
+
+import { PotionGrid } from "@/components/potions/potion-grid";
 
 export default async function Home() {
   const potions = await fetchPotions();
@@ -16,19 +15,7 @@ export default async function Home() {
         <p className="text-lg text-foreground/80 "> Discover magical potions brewed from the powers of popular open-source</p>
       </div>
       <div className="mt-8">
-        {potions.map(({full_name, name, description, topics}: PotionType , index: number) => (
-          <Card className="" key={`${full_name}-${index}`}>
-            <CardHeader>{name }</CardHeader>
-            <CardContent>{ description}</CardContent>
-            <CardFooter>
-              <div className="flex items-center gap-2">
-              {topics.map((topic, index) => (
-                <span key={index}>{topic}</span>
-              ))}
-              </div>
-            </CardFooter>
-        </Card>
-        ))}
+        <PotionGrid potions={potions}/>
       </div>
     </main>
   )
