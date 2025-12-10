@@ -1,5 +1,6 @@
 import { fetchPotion } from "@/lib/github"
 import { notFound } from "next/navigation"
+import PotionInfo from "@/components/potions/potion-info"
 
 export async function generateStaticParams() {
   const popularRepos = [
@@ -31,5 +32,5 @@ export default async function PotionPage({
   
   const potion = await fetchPotion(owner, repo)
 
-  return <div> My Post: {JSON.stringify(potion)} </div>
+  return <PotionInfo potion={potion} />
 }

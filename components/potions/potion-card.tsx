@@ -10,7 +10,7 @@ import { PackageIcon, StarIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { formatNumber } from "@/utils/costants";
 import Link from "next/link";
-
+import { PotionStats } from "./potion-common";
 
 
 export function PotionCard({
@@ -60,16 +60,7 @@ export function PotionCard({
           <p className="text-sm flex items-center gap-1.5 mb-1 text-magic-light-purple">
             <span>✨</span>Effect: {potionEffect}
           </p>
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
-            <div className="flex items-center gap-1">
-              <StarIcon className="w-3.5 h-3.5 text-yellow-400" />
-              <span>{formatNumber(stargazers_count)}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <PackageIcon className="w-3.5 h-3.5 text-blue-400" />
-              <span>{formatNumber(forks_count)}</span>
-            </div>
-          </div>
+            <PotionStats stars={stargazers_count} forks={forks_count} classNames="items-center text-xs text-muted-foreground" />
         </div>
         <div className="flex flex-wrap gap-2">
           {topics.map((topic, index) => (
@@ -87,3 +78,4 @@ export function PotionCard({
     
   );
 }
+
