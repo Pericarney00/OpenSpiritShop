@@ -32,5 +32,9 @@ export default async function PotionPage({
   
   const potion = await fetchPotion(owner, repo)
 
+  if (!potion) {
+    notFound()
+  }
+
   return <PotionInfo potion={potion} />
 }
