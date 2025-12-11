@@ -1,15 +1,14 @@
 import { GithubRepo, MagicalType } from "@/types/github";
-import { MAGICAL_TYPES } from "@/utils/costants";
+import { MAGICAL_TYPES } from "@/utils/constants";
 
-  
-const GITHUB_API_URL = "https://api.github.com"
+const GITHUB_API_URL = "https://api.github.com";
 
 const POTION_EFFECTS = [
   "Grants the power of rapid development",
   "Enhances code clarity and maintainability",
   "Boots performance and efficiency",
   "Provides magical debugging abilities",
-  "Unlocks the secrets of clean architechture"
+  "Unlocks the secrets of clean architechture",
 ];
 
 const transformRepoToPotion = (repo: GithubRepo, index: number) => {
@@ -19,7 +18,7 @@ const transformRepoToPotion = (repo: GithubRepo, index: number) => {
     potionEffect: POTION_EFFECTS[index % POTION_EFFECTS.length],
     magicalType: MAGICAL_TYPES[index % MAGICAL_TYPES.length].id as MagicalType,
   };
-}
+};
 
 export async function fetchPotions() {
   const url = `${GITHUB_API_URL}/search/repositories?q=topic:javascript+stars:>5000&sort=stars&order=desc`;
@@ -28,36 +27,37 @@ export async function fetchPotions() {
 
   const headers = {
     Accept: "application/vnd.github+json",
-      Authorization: `Bearer ${githubToken}`,
-    }
-  
+    Authorization: `Bearer ${githubToken}`,
+  };
 
   try {
-    const response = await fetch(url, {headers, "cache": "force-cache"});
+    const response = await fetch(url, { headers, cache: "force-cache" });
 
     const data = await response.json();
     console.log({ data });
     return data.items.map((repo: GithubRepo, index: number) =>
-    transformRepoToPotion(repo,index))
+      transformRepoToPotion(repo, index)
+    );
   } catch (error) {
     console.error(`Failed to fetch potions`, (error as Error).message);
     return [];
   }
 }
 
-export async function fetchPotion(owner: string, repo:string) {
+export async function fetchPotion(owner: string, repo: string) {
   const url = `${GITHUB_API_URL}/repos/${owner}/${repo}`;
 
   const githubToken = process.env.GITHUB_TOKEN;
 
   const headers = {
     Accept: "application/vnd.github+json",
-      Authorization: `Bearer ${githubToken}`,
-    }
+    Authorization: `Bearer ${githubToken}`,
+  };
 
   try {
     const response = await fetch(url, {
-      headers, next: { revalidate: 3600 } //every hour
+      headers,
+      next: { revalidate: 3600 }, //every hour
     });
 
     const data = await response.json();
@@ -71,7 +71,7 @@ export async function fetchPotion(owner: string, repo:string) {
   }
 }
 
-export async function fetchRandonTrendingPotion() {
+export async function fetchRandomTrendingPotion() {
   const url = `${GITHUB_API_URL}/search/repositories?q=topic:javascript+stars:>7000&sort=stars&order=desc`;
 
   const githubToken = process.env.GITHUB_TOKEN;
@@ -82,15 +82,18 @@ export async function fetchRandonTrendingPotion() {
   };
 
   try {
-    const response = await fetch(url, { headers, cache: "no-store" });//SSR
+    const response = await fetch(url, { headers, cache: "no-store" }); //SSR
 
     const data = await response.json();
     console.log({ data });
-    const randomIndex = Math.floor(Math.random()* data.items.length)
+    const randomIndex = Math.floor(Math.random() * data.items.length);
     return transformRepoToPotion(data.items[randomIndex], randomIndex);
   } catch (error) {
-    
-    if (error instanceof Error && "digest" in error && error.digest === "DYNAMIC_SERVER_USAGE") {
+    if (
+      error instanceof Error &&
+      "digest" in error &&
+      error.digest === "DYNAMIC_SERVER_USAGE"
+    ) {
       throw error;
     }
     console.error(`Failed to fetch potions`, (error as Error).message);

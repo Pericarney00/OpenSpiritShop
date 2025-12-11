@@ -1,6 +1,28 @@
 import { fetchPotion } from "@/lib/github"
 import { notFound } from "next/navigation"
 import PotionInfo from "@/components/potions/potion-info"
+import { ORIGIN_URL } from "@/utils";
+
+type MetadataParams = {
+  params: Promise<{ slug: string }>;
+}
+
+export const generateMetadata = async ({params}:MetadataParams) => {
+  const { slug } = await params;
+
+  const [owner, repo] = await slug.split("__");
+
+  const potion = await fetchPotion(owner, repo);
+
+  return {
+    title: `${potion?.name}`,
+    description: potion?.description,
+    alternates: {
+      canonical: `/potions/${owner}__${repo} `,
+    },
+  };
+};
+
 
 export async function generateStaticParams() {
   const popularRepos = [

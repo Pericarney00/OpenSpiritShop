@@ -1,10 +1,9 @@
-import  Image  from "next/image";
+import Image from "next/image";
 import { PackageIcon, StarIcon } from "lucide-react";
-import { formatNumber } from "@/utils/costants";
+import { formatNumber } from "@/utils/constants";
 import { cn } from "@/lib/utils";
 
-
-interface PotionHeaderType{
+interface PotionHeaderType {
   name: string;
   owner: { login: string; avatar_url: string };
   size?: "small" | "medium";
@@ -55,13 +54,13 @@ interface PotionInfoCardType {
   children?: React.ReactNode;
 }
 
-export  function PotionInfoCard({title, children}:PotionInfoCardType) {
+export function PotionInfoCard({ title, children }: PotionInfoCardType) {
   return (
     <div className="p-4 rounded-lg bg-background/40 border border-magic-purple/10">
       <h4 className="text-sm font-medium text-magic-purple mb-2"> {title} </h4>
       {children}
     </div>
-  )
+  );
 }
 
 interface PotionStatsType {
@@ -70,7 +69,7 @@ interface PotionStatsType {
   classNames?: string;
 }
 
-export  function PotionStats({stars,forks, classNames}:PotionStatsType) {
+export function PotionStats({ stars, forks, classNames }: PotionStatsType) {
   return (
     <div className={cn("flex justify-between", classNames)}>
       <div className="flex items-center gap-1">
@@ -82,5 +81,5 @@ export  function PotionStats({stars,forks, classNames}:PotionStatsType) {
         <span>{formatNumber(forks)}</span>
       </div>
     </div>
-  )
+  );
 }
