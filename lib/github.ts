@@ -89,6 +89,10 @@ export async function fetchRandonTrendingPotion() {
     const randomIndex = Math.floor(Math.random()* data.items.length)
     return transformRepoToPotion(data.items[randomIndex], randomIndex);
   } catch (error) {
+    
+    if (error instanceof Error && "digest" in error && error.digest === "DYNAMIC_SERVER_USAGE") {
+      throw error;
+    }
     console.error(`Failed to fetch potions`, (error as Error).message);
     return null;
   }
